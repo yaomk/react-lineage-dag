@@ -157,6 +157,7 @@ const App = () => {
     titleRender?: () => void;                         // title render of custom node
     showActionIcon?: boolean,                        // whether to display the operation icons: zoom in, zoom out, focus
     enableHoverChain: boolean,                       // whether to enable highlight the chain when hovering
+    enableClickChain: boolean,                       // whether to enable highlight the chain when clicking
     minimap?: {                                      // whether to enable thumbnail
       enable: boolean,
       config: {

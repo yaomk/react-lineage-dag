@@ -149,7 +149,8 @@ const App = () => {
     delayDraw: number; // 延迟渲染，此组件一定要确保画布容器渲染(包括动画执行)完毕才能渲染,否则坐标都产生偏移,如：antd的
     titleRender?: (title: string, node:any) => void; // 自定义节点的title render
     showActionIcon?: boolean,                        // 是否展示操作icon：放大，缩小，聚焦
-    enableHoverChain: boolean,                       // 是否开启hover高亮链路
+    enableHoverChain: boolean,                       // 是否开启hover高亮链路, default: true
+    enableClickChain: boolean,                       // 是否开启click高亮链路, default: true
     minimap?: {                                      // 是否开启缩略图
       enable: boolean,
       config: {

@@ -18,7 +18,8 @@ interface ComProps {
   config?: {
     titleRender: (node:ITable) => void,              // 自定义节点的title render
     showActionIcon?: boolean,                        // 是否展示操作icon：放大，缩小，聚焦
-    enableHoverChain: boolean,                       // 是否开启hover高亮血缘链路
+    enableHoverChain: boolean,                       // 是否开启hover高亮血缘链路, default:true
+    enableClickChain: boolean,                       // 是否开启click高亮血缘链路, default:true
     minimap?: {                                      // 是否开启缩略图
       enable: boolean,
       config: {
@@ -86,6 +87,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
     let root = ReactDOM.findDOMNode(this) as HTMLElement;
 
     let enableHoverChain = _.get(this.props, 'config.enableHoverChain', true);
+    let enableClickChain = _.get(this.props, 'config.enableClickChain', true);
     let titleRender = _.get(this.props, 'config.titleRender');
 
     let canvasObj = {
@@ -98,7 +100,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       theme: {
         edge: {
           type: 'endpoint',
-          // shapeType: 'AdvancedBezier', 
+          // shapeType: 'AdvancedBezier',
           arrow: true,
           isExpandWidth: true,
           arrowPosition: 1,
@@ -115,7 +117,8 @@ export default class LineageDag extends React.Component<ComProps, any> {
         }
       },
       data: {
-        enableHoverChain: enableHoverChain
+        enableHoverChain: enableHoverChain,
+        enableClickChain: enableClickChain,
       }
     };
 
@@ -128,6 +131,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       operator: this.props.operator,
       _titleRender: titleRender,
       _enableHoverChain: enableHoverChain,
+      _enableClickChain: enableClickChain,
       _emptyContent: this.props.emptyContent,
       _emptyWidth: this.props.emptyWidth
     });
@@ -139,7 +143,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       nodes: result.nodes,
       edges: result.edges
     };
-    
+
     setTimeout(() => {
       let tmpEdges = result.edges;
       result.edges = [];
@@ -156,7 +160,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
         // this.canvas.wrapper.style.visibility = 'visible';
         this.canvas.addEdges(tmpEdges, true);
 
-        let minimap = _.get(this, 'props.config.minimap', {});
+        let minimap = _.get(this, 'props.config.minimap', {}) as {enable?: boolean, config?: any};
 
         const minimapCfg = _.assign({}, minimap.config, {
           events: [
@@ -187,6 +191,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       });
       this.canvas.on('system.canvas.click', () => {
         this.canvas.unfocus();
+        this.canvas.unclick();
       });
     }, _.get(this.props, 'config.delayDraw', 0));
 
@@ -194,6 +199,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
   shouldComponentUpdate (newProps: ComProps, newState: any) {
 
     let enableHoverChain = _.get(newProps, 'config.enableHoverChain', true);
+    let enableClickChain = _.get(newProps, 'config.enableClickChain', true);
     let titleRender = _.get(this.props, 'config.titleRender');
 
     let result = transformInitData({
@@ -203,6 +209,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       operator: this.props.operator,
       _titleRender: titleRender,
       _enableHoverChain: enableHoverChain,
+      _enableClickChain: enableClickChain,
       _emptyContent: this.props.emptyContent,
       _emptyWidth: this.props.emptyWidth
     });
@@ -267,7 +274,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
           }
         });
       });
-    } 
+    }
 
     this.canvasData = result;
 
@@ -287,7 +294,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       <div
         className={this._genClassName()}
       >
-        <ActionMenu 
+        <ActionMenu
           canvas={canvas}
           actionMenu={actionMenu}
           visible={actionMenuVisible}

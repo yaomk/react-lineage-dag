@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 export let transformInitData = (data) => {
   let {
     tables, relations, columns, emptyContent, operator,
-    _titleRender, _enableHoverChain, _emptyContent, _emptyWidth
+    _titleRender, _enableHoverChain, _emptyContent, _emptyWidth, _enableClickChain
   } = data;
 
   let result = {
@@ -19,6 +19,7 @@ export let transformInitData = (data) => {
         _operator: operator,
         _titleRender,
         _enableHoverChain,
+        _enableClickChain,
         _emptyContent,
         _emptyWidth
       }, item);
@@ -287,7 +288,7 @@ export let diffActionMenuData = (newMenu, oldMenu) => {
 
 //   let addNodes = _.differenceWith(newData.nodes, oldData.nodes, isSameId);
 //   let rmNodes = _.differenceWith(oldData.nodes, newData.nodes, isSameId);
-  
+
 
 //   let addFields = [];
 //   let rmFields = [];
@@ -314,7 +315,7 @@ export let diffActionMenuData = (newMenu, oldMenu) => {
 //       }
 //     }
 //   });
-  
+
 //   oldData.nodes.forEach((_oldNode) => {
 //     let _newNode = _.find(newData.nodes, _node => _node.id === _oldNode.id);
 //     if (_newNode) {

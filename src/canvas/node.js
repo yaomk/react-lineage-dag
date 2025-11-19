@@ -21,7 +21,7 @@ export default class TableNode extends Node {
     this._renderPromise = Promise.resolve();
 
     this._isRendering = false;
-    
+
   }
   mounted() {
     // 生成field的endpoint
@@ -235,7 +235,7 @@ export default class TableNode extends Node {
       if (isCollapse) {
         return;
       }
-      
+
       fields.forEach((_field, index) => {
         let fieldDom = $('<div class="field"></div>');
         fieldDom.css({
@@ -269,13 +269,21 @@ export default class TableNode extends Node {
               fieldId: _field[_primaryKey]
             });
           });
-      
+
           $(fieldDom).on('mouseout', (e) => {
             this.emit('custom.field.unHover', {
               node: this,
               fieldId: _field[_primaryKey]
             });
           });
+        }
+        if (this.options._enableClickChain) {
+          $(fieldDom).on('click', (e) => {
+            this.emit('custom.field.click', {
+              node: this,
+              fieldId: _field[_primaryKey]
+            })
+          })
         }
 
         container.append(fieldDom);

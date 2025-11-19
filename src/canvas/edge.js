@@ -34,6 +34,13 @@ export default class MEdge extends Edge {
     $(this.labelDom).removeClass(rmClass);
     this.setZIndex(0);
   }
+  clickChain(addClass = 'click-chain', isAddClass = true) {
+    const action = isAddClass ? 'addClass' : 'removeClass';
+    $(this.dom)[action](addClass);
+    $(this.arrowDom)[action](addClass);
+    $(this.labelDom)[action](addClass);
+    this.setZIndex(isAddClass ? 1000 : 0);
+  }
   destroy(isNotEventEmit) {
     super.destroy(isNotEventEmit);
     if (!this.sourceNode.options.isCollapse) {
