@@ -89,14 +89,16 @@ export default class LineageDag extends React.Component<ComProps, any> {
     let enableHoverChain = _.get(this.props, 'config.enableHoverChain', true);
     let enableClickChain = _.get(this.props, 'config.enableClickChain', true);
     let titleRender = _.get(this.props, 'config.titleRender');
+    let butterfly = _.get(this.props, 'config.butterfly', {})
 
-    let canvasObj = {
-      root: root,
-      disLinkable: false,
-      linkable: false,
-      draggable: false,
-      zoomable: true,
-      moveable: true,
+    const constOption = {
+      disLinkable: false, // 可删除连线
+      linkable: false,    // 可连线
+      draggable: false,   // 可拖动
+      zoomable: true,    // 可放大
+      moveable: true,    // 可平移
+    };
+    const defaultOptions = {
       theme: {
         edge: {
           type: 'endpoint',
@@ -116,11 +118,21 @@ export default class LineageDag extends React.Component<ComProps, any> {
           }
         }
       },
+    }
+
+    let canvasObj = _.merge(
+      {},
+      {
+      root: root,
       data: {
         enableHoverChain: enableHoverChain,
         enableClickChain: enableClickChain,
       }
-    };
+    },
+    defaultOptions,
+    butterfly,
+    constOption
+    );
 
     this.canvas = new LineageCanvas(canvasObj);
 
@@ -149,6 +161,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       result.edges = [];
       // this.canvas.wrapper.style.visibility = 'hidden';
       this.canvas.draw(result, () => {
+        // debugger
         this.canvas.relayout({
           edges: tmpEdges.map((item) => {
             return {
@@ -244,19 +257,23 @@ export default class LineageDag extends React.Component<ComProps, any> {
     }
 
     if (diffInfo.addEdges.length > 0) {
-      this.canvas.addEdges(diffInfo.addEdges);
+      // this.canvas.addEdges(diffInfo.addEdges);
       isNeedRelayout = true;
     }
 
     if (isNeedRelayout) {
-      this.canvas.relayout({
-        centerNodeId: newProps.centerId
-      });
       let nodesRenderPromise = this.canvas.nodes.map((item) => {
         return item._renderPromise;
       });
 
       this.canvas._renderPromise = Promise.all(nodesRenderPromise).then(() => {
+        if (diffInfo.addEdges.length > 0) {
+          this.canvas.addEdges(diffInfo.addEdges);
+        }
+
+        this.canvas.relayout({
+          centerNodeId: newProps.centerId
+        });
         return new Promise<void>((resolve, reject) => {
           if (newProps.centerId) {
             this.canvas.focusNodeWithAnimate(newProps.centerId, 'node' , {}, () => {

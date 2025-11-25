@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: {
     app: './index.jsx'
   },
@@ -40,7 +41,7 @@ module.exports = {
             plugins: [
               '@babel/plugin-transform-runtime',
               '@babel/plugin-transform-modules-commonjs',
-              '@babel/plugin-proposal-object-rest-spread', 
+              '@babel/plugin-proposal-object-rest-spread',
               '@babel/plugin-proposal-class-properties',
             ]
           }
@@ -99,5 +100,6 @@ module.exports = {
     index: 'index.html',
     port: 8080,
     open: true
-  }
+  },
+  devtool:  'cheap-module-source-map'
 };

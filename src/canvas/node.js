@@ -27,8 +27,12 @@ export default class TableNode extends Node {
     // 生成field的endpoint
     this._createNodeEndpoint(true);
 
+
     this.width = this.options.width = $(this.dom).width();
     this.height = this.options.height = $(this.dom).height();
+    if (_.get(this, 'options._titleRender')) {
+      this.height += this.TITLE_HEIGHT;
+    }
 
   }
   draw(obj) {
@@ -162,6 +166,8 @@ export default class TableNode extends Node {
                 node: this
               })
             } else {
+              this.width = this.options.width = $(this.dom).width();
+              this.height = this.options.height = $(this.dom).height();
               let points = [];
               this.endpoints.forEach((item) => {
                 if (item.options._isNodeSelf) {
@@ -184,6 +190,7 @@ export default class TableNode extends Node {
         'height': this.TITLE_HEIGHT + 'px',
         'line-height': this.TITLE_HEIGHT + 'px'
       });
+      titleDom.text(title);
     }
 
     if (!isUpdate) {

@@ -206,6 +206,7 @@ export default class LineageCanvas extends Canvas {
         if((current.top + current.height + nodestep) < next.top) {
           next.top = current.top + current.height + nodestep;
         }
+        next.top = current.top + current.height + nodestep;
       }
     });
 

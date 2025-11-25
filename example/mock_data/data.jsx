@@ -1,5 +1,5 @@
-'use strict';
-import React from 'react';
+'use strict'
+import React from 'react'
 
 export let mockData = {
   tables: [
@@ -10,13 +10,13 @@ export let mockData = {
       fields: [
         {
           name: 'id',
-          title: 'id',
+          title: '',
         },
         {
           name: 'age',
-          title: 'age'
-        }
-      ]
+          title: 'age',
+        },
+      ],
     },
     {
       id: '2',
@@ -29,7 +29,7 @@ export let mockData = {
         },
         {
           name: 'age',
-          title: 'age'
+          title: 'age',
         },
         {
           name: 'id2',
@@ -37,7 +37,7 @@ export let mockData = {
         },
         {
           name: 'age2',
-          title: 'age2'
+          title: 'age2',
         },
         {
           name: 'id3',
@@ -45,7 +45,7 @@ export let mockData = {
         },
         {
           name: 'age3',
-          title: 'age3'
+          title: 'age3',
         },
         {
           name: 'id4',
@@ -53,14 +53,14 @@ export let mockData = {
         },
         {
           name: 'age4',
-          title: 'age4'
-        }
-      ]
+          title: 'age4',
+        },
+      ],
     },
     {
       id: '3',
       name: 'table-3',
-      isCollapse: true,
+      isCollapse: false,
       fields: [
         {
           name: 'id',
@@ -68,14 +68,14 @@ export let mockData = {
         },
         {
           name: 'age',
-          title: 'age'
-        }
-      ]      
+          title: 'age',
+        },
+      ],
     },
     {
       id: '4',
       name: 'table-4',
-      isCollapse: true,
+      isCollapse: false,
       fields: [
         {
           name: 'id',
@@ -83,45 +83,122 @@ export let mockData = {
         },
         {
           name: 'age',
-          title: 'age'
-        }
-      ]      
-    }
+          title: 'age',
+        },
+      ],
+    },
   ],
   relations: [
     {
       srcTableId: '1',
       tgtTableId: '2',
       srcTableColName: 'id',
-      tgtTableColName: 'age'
+      tgtTableColName: 'age',
     },
     {
       srcTableId: '1',
       tgtTableId: '2',
       srcTableColName: 'id',
-      tgtTableColName: 'id'
-    },    
+      tgtTableColName: 'id',
+    },
     {
       srcTableId: '1',
       tgtTableId: '3',
       srcTableColName: 'id',
-      tgtTableColName: 'age'      
+      tgtTableColName: 'age',
     },
     {
       srcTableId: '2',
       tgtTableId: '4',
       srcTableColName: 'id',
-      tgtTableColName: 'age'      
+      tgtTableColName: 'age',
     },
     {
       srcTableId: '2',
       tgtTableId: '4',
       srcTableColName: 'id',
-      tgtTableColName: 'id'
+      tgtTableColName: 'id',
+    },
+  ],
+}
+
+export let mockData2 = {
+  tables: [
+    {
+      id: '2',
+      name: 'default_',
+      isExpand: true,
+      fields: [
+        {
+          name: 'log_time',
+          title: 'log_time',
+        },
+        {
+          name: 'request_line',
+          title: 'request_line',
+        },
+        {
+          name: 'status_code',
+          title: 'status_code',
+        },
+        {
+          name: 'size',
+          title: 'size',
+        },
+      ]
     },
     {
+      fields: [
+        {
+          name: 'log_time',
+          title: 'log_time',
+        },
+        {
+          name: 'request_line',
+          title: 'request_line',
+        },
+        {
+          name: 'status_code',
+          title: 'status_code',
+        },
+        {
+          name: 'size',
+          title: 'size',
+        },
+      ],
+      id: '3',
+      isExpand: true,
+      name: 'abase'
+    },
+  ],
+  relations: [
+    {
+      id: '2',
       srcTableId: '2',
-      tgtTableId: '4'
-    }    
-  ]
+      tgtTableId: '3',
+      srcTableColName: 'log_time',
+      tgtTableColName: 'log_time',
+    },
+    {
+      id: '3',
+      srcTableId: '2',
+      tgtTableId: '3',
+      srcTableColName: 'request_line',
+      tgtTableColName: 'request_line',
+    },
+    {
+      id: '4',
+      srcTableId: '2',
+      tgtTableId: '3',
+      srcTableColName: 'status_code',
+      tgtTableColName: 'status_code',
+    },
+    {
+      id: '5',
+      srcTableId: '2',
+      tgtTableId: '3',
+      srcTableColName: 'size',
+      tgtTableColName: 'size',
+    },
+  ],
 }

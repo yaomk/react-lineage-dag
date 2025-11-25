@@ -1,12 +1,12 @@
 {
-  "name": "react-lineage-dag",
+  "name": "@zbp/react-lineage-dag",
   "version": "2.0.35",
   "description": "表格/字段血缘React组件",
   "main": "dist/index.js",
   "pack": "pack/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c && cp -r ./src/static ./dist && cp -r ./src/static ./pack && tsc -d --emitDeclarationOnly --target esnext --removeComments false --allowJs false --declarationDir ./dist",
+    "build": "rollup -c && shx cp -r ./src/static ./dist && shx cp -r ./src/static ./pack && tsc -d --emitDeclarationOnly --target esnext --removeComments false --allowJs false --declarationDir ./dist",
     "dev": "rollup -w -c"
   },
   "repository": {
@@ -56,6 +56,7 @@
     "rollup-plugin-postcss": "~4.0.0",
     "rollup-plugin-typescript2": "~0.29.0",
     "rollup-plugin-url": "~3.0.1",
+    "shx": "^0.4.0",
     "typescript": "~4.1.3"
   }
 }

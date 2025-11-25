@@ -6,7 +6,8 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {Layout, Tooltip} from 'antd';
 import * as _ from 'lodash';
 import LineageDag from '../src/index.tsx';
-import {mockData} from './mock_data/data';
+import {mockData2 as mockData} from './mock_data/data';
+// import {mockData} from './mock_data/data';
 
 import 'antd/dist/antd.css';
 import './index.less';
@@ -19,9 +20,10 @@ class Com extends React.Component {
   constructor(props) {
     super(props);
     const {tables, relations} = mockData;
+    console.log(mockData);
     this.state = {
-      tables,
-      relations,
+      tables: _.cloneDeep(tables),
+      relations: _.cloneDeep(relations),
       canvas: null,
       actionMenu: [{
         icon: <StarOutlined />,
@@ -29,13 +31,12 @@ class Com extends React.Component {
         onClick: () => {
           alert('点击收藏！')
         }
-      }]
+      }],
+      flag: true,
     };
     this.columns = [{
       key: 'name',
       primaryKey: true
-    }, {
-      key: 'title',
     }];
     this.operator = [{
       id: 'isExpand',
@@ -109,7 +110,52 @@ class Com extends React.Component {
           centerId: nodeData.id
         });
       }
-    }, {
+    },
+    {
+      id: 'remove',
+      name: '折叠',
+      icon: <Tooltip title='折叠'><CloseCircleOutlined /></Tooltip>,
+      onClick: (nodeData) => {
+        let newData = _.cloneDeep(mockData);
+        let tableId = nodeData.id
+        if(this.state.flag) {
+        const table = newData.tables.find((t) => t.id === tableId);
+        table.isExpand = false;
+        const children = this.getChildren(tableId);
+        children.tables.forEach((table) => {
+          const index = newData.tables.findIndex((t) => t.id === table.id);
+          newData.tables.splice(index, 1);
+        });
+        children.relations.forEach((relation) => {
+          const index = newData.relations.findIndex((r) => r.id === relation.id);
+          newData.relations.splice(index, 1);
+        });
+        } else {
+          const table = newData.tables.find((t) => t.id === tableId);
+          table.isExpand = true;
+          const children = this.getChildren(tableId);
+          children.tables.forEach((table) => {
+            if (newData.tables.some((t) => t.id === table.id)) {
+              return;
+            }
+            newData.tables.push(table);
+          });
+          children.relations.forEach((relation) => {
+            if (newData.relations.some((r) => r.id === relation.id)) {
+              return;
+            }
+            newData.relations.push(relation);
+          });
+        }
+
+        this.setState({
+          tables: newData.tables,
+          relations: newData.relations,
+          flag: !this.state.flag
+        });
+      }
+    },
+    {
       id: 'remove',
       name: '删除节点',
       icon: <Tooltip title='删除节点'><CloseCircleOutlined /></Tooltip>,
@@ -139,43 +185,89 @@ class Com extends React.Component {
     //   });
     // }, 5000)
   }
+  getChildren = (tableId) => {
+    const children = {
+      tables: [],
+      relations: [],
+    };
+    mockData.relations.forEach((relation) => {
+      if (relation.srcTableId !== tableId) {
+        return;
+      }
+      children.relations.push(relation);
+      const tgtTableId = relation.tgtTableId;
+      if (children.tables.some((table) => table.id === tgtTableId)) {
+        return;
+      }
+      const table = mockData.tables.find((table) => table.id === tgtTableId);
+      children.tables.push(table);
+    });
+    return children;
+  };
+  onClick = () => {
+    console.log(this);
+    if(this.state.flag) {
+
+    }
+    this.state.tables
+  }
   render() {
     return (
-      <LineageDag
-        tables={this.state.tables}
-        relations={this.state.relations}
-        columns={this.columns}
-        operator={this.operator}
-        centerId={this.state.centerId}
-        onLoaded={(canvas) => {
-          this.setState({
-            canvas
-          });
-        }}
-        config={{
-          titleRender: (title, node) => {
-            return <div className="title-test" onClick={() => {
-              let tables = _.cloneDeep(this.state.tables);
-              tables.forEach((item) => {
-                item.name = 'title change';
-              });
-              this.setState({
-                tables
-              }, () => {
-                this.state.canvas.nodes.forEach((item) => {
-                  item.redrawTitle();
-                });
-              });
-            }}>{title}</div>
-          },
-          minimap: {
-            enable: true
-          }
-        }}
-
-        actionMenu={this.state.actionMenu}
-      />
-    );
+      <div style={{width: '100%', height: '100%'}}>
+        <button onClick={this.onClick}>change</button>
+        <LineageDag
+          tables={this.state.tables}
+          relations={this.state.relations}
+          columns={this.columns}
+          operator={this.operator}
+          centerId={this.state.centerId}
+          onLoaded={(canvas) => {
+            this.setState({
+              canvas,
+            })
+          }}
+          config={{
+            delayDraw: 1000,
+            titleRender: (title, node) => {
+              return (
+                <div
+                  className="title-test"
+                  onClick={() => {
+                    let tables = _.cloneDeep(this.state.tables)
+                    tables.forEach((item) => {
+                      item.name = 'title change'
+                    })
+                    this.setState(
+                      {
+                        tables,
+                      },
+                      () => {
+                        this.state.canvas.nodes.forEach((item) => {
+                          item.redrawTitle()
+                        })
+                      }
+                    )
+                  }}
+                >
+                  {title}
+                </div>
+              )
+            },
+            minimap: {
+              enable: true,
+            },
+            butterfly: {
+              theme: {
+                edge: {
+                  arrow: false
+                }
+              }
+            }
+          }}
+          actionMenu={this.state.actionMenu}
+        />
+      </div>
+    )
   }
 }
 
