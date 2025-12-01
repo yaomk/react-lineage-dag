@@ -20,6 +20,9 @@ export default class LineageCanvas extends Canvas {
       });
       this.on('custom.field.unHover', (data) => {
         this.unfocusChain(data.node.id, data.fieldId, 'hover-chain');
+        if(this._enableClickChain && this._currentClickedItem) {
+          this.clickChain(this._currentClickedItem.node.id, this._currentClickedItem.fieldId, 'click-chain')
+        }
       });
     }
     if (this._enableClickChain) {

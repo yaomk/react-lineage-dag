@@ -99,7 +99,7 @@ module.exports = {
     inline: true, // 实时刷新
     index: 'index.html',
     port: 8080,
-    open: true
+    open: false
   },
   devtool:  'cheap-module-source-map'
 };
